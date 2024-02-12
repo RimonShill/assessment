@@ -1,0 +1,27 @@
+name: Deploy production pipeline
+
+on:
+  push:
+    branches:
+      - production
+
+jobs:
+  deploy-staging:
+    name: Deploy production pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: production
+
+      - name: Deploy production pipeline
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            pwd
+            ./production.sh
