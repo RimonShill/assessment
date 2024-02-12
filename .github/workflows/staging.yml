@@ -1,0 +1,27 @@
+name: Deploy staging pipeline
+
+on:
+  push:
+    branches:
+      - staging
+
+jobs:
+  deploy-staging:
+    name: Deploy staging pipeline
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: staging
+
+      - name: Deploy staging pipeline
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOSTNAME }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSHKEY_KEY }}
+          port: ${{ secrets.PORT }}
+          script: |
+            pwd
+            ./staging.sh
